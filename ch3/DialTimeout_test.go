@@ -27,7 +27,10 @@ func DialTimeout(network, address string, timeout time.Duration) (
 func TestDialTimeout(t *testing.T) {
 	c, err := DialTimeout("tcp", "127.0.0.1:http", 5*time.Second)
 	if err == nil {
-		c.Close()
+		err := c.Close()
+		if err != nil {
+			return
+		}
 		t.Fatal("connection did not time out")
 	}
 	nErr, ok := err.(net.Error)

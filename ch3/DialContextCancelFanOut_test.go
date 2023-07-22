@@ -23,7 +23,10 @@ func TestDialContextCancelFanOut(t *testing.T) {
 		// Only accepting a single connection
 		conn, err := listener.Accept()
 		if err == nil {
-			conn.Close()
+			err := conn.Close()
+			if err != nil {
+				return
+			}
 		}
 	}()
 
