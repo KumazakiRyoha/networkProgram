@@ -1,4 +1,4 @@
-package main
+package ch3
 
 import (
 	"net"
