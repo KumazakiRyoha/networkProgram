@@ -4,12 +4,13 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"testing"
 	"time"
 )
 
-func ExamplePinger() {
+func TestPingExample(t *testing.T) {
 
-	// 创建一个可以被取消的contest对象，cancel函数被用来在适当的时候结束pinger goroutine
+	// 创建一个可以被取消的context对象，cancel函数被用来在适当的时候结束pinger goroutine
 	ctx, cancel := context.WithCancel(context.Background())
 	// 使用io.Pipe 创建一对读写管道
 	r, w := io.Pipe()
