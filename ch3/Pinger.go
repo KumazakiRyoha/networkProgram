@@ -10,6 +10,7 @@ const defaultPingInterval = 30 * time.Second
 
 func Pinger(ctx context.Context, w io.Writer, reset <-chan time.Duration) {
 	var interval time.Duration
+	// 从reset通道中拿到一个时间间隔
 	select {
 	case <-ctx.Done():
 		return
@@ -19,6 +20,7 @@ func Pinger(ctx context.Context, w io.Writer, reset <-chan time.Duration) {
 	if interval <= 0 {
 		interval = defaultPingInterval
 	}
+	// 创建一个定时器
 	timer := time.NewTimer(interval)
 	// 函数结执行时清空`C`通道
 	defer func() {
@@ -27,6 +29,7 @@ func Pinger(ctx context.Context, w io.Writer, reset <-chan time.Duration) {
 		}
 	}()
 
+	// 无线循环，等待新的时间间隔或者写出数据
 	for {
 		select {
 		case <-ctx.Done():
