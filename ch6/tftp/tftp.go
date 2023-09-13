@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"io/ioutil"
 	"log"
 	tftp "networkProgram/ch6"
+	"os"
 )
 
 var (
@@ -15,7 +15,7 @@ var (
 func main() {
 	flag.Parse()
 
-	p, err := ioutil.ReadFile(*payload)
+	p, err := os.ReadFile(*payload)
 	if err != nil {
 		log.Fatal(err)
 	}

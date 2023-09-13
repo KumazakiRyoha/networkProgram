@@ -89,7 +89,7 @@ func (q *ReadReq) UnmarshalBinary(p []byte) error {
 	if code != OpRRQ {
 		return errors.New("invalid RRQ")
 	}
-	// 	从缓冲区读取知道遇到第一个空字节(null byte)
+	// 	从缓冲区读取直到遇到第一个空字节(null byte)
 	q.Filename, err = r.ReadString(0) // read filename
 	if err != nil {
 		return errors.New("invalid RRQ")
@@ -135,7 +135,7 @@ func (d *Data) MarshalBinary() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	binary.Write(b, binary.BigEndian, d.Block) // write block number
+	err = binary.Write(b, binary.BigEndian, d.Block) // write block number
 	if err != nil {
 		return nil, err
 	}
