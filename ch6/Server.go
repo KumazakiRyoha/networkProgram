@@ -64,7 +64,7 @@ func (s *Server) Server(conn net.PacketConn) error {
 
 // handle 读取来自客户端的读请求
 func (s Server) handle(clientAddr string, rrq ReadReq) {
-	log.Printf("[%s] request file: %s", clientAddr, rrq.Filename)
+	log.Printf("[%s] request files: %s", clientAddr, rrq.Filename)
 
 	conn, err := net.Dial("udp", clientAddr)
 	if err != nil {
