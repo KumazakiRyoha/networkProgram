@@ -83,7 +83,9 @@ func TestPostUser(t *testing.T) {
 }
 
 func TestMultipartPost(t *testing.T) {
+	// 设置缓冲区
 	reqBody := new(bytes.Buffer)
+	// 创建multipart写入器，指定写入的对象
 	w := multipart.NewWriter(reqBody)
 
 	for k, v := range map[string]string{
@@ -127,6 +129,7 @@ func TestMultipartPost(t *testing.T) {
 		t.Fatal(err)
 	}
 	req.Header.Set("Content-Type", w.FormDataContentType())
+	// 发送请求
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatal(err)
