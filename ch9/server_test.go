@@ -13,6 +13,8 @@ import (
 )
 
 func TestSimpleHTTPServer(t *testing.T) {
+
+	// 新建一个http server
 	srv := http.Server{
 		Addr: "127.0.0.1:8081",
 		Handler: http.TimeoutHandler(
@@ -20,13 +22,15 @@ func TestSimpleHTTPServer(t *testing.T) {
 		IdleTimeout:       5 * time.Minute,
 		ReadHeaderTimeout: time.Minute,
 	}
+	// 监听器在指定的端口上监听传入的连接
 	l, err := net.Listen("tcp", srv.Addr)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	go func() {
-		err = srv.Serve(l)
+		// http.Server开始处理连接到指定端口的请求
+		err = srv.ServeTLS(l, "certs/cert.pem", "certs/key.pem")
 		if err != http.ErrServerClosed {
 			t.Error(err)
 		}
@@ -40,7 +44,7 @@ func TestSimpleHTTPServer(t *testing.T) {
 	}{
 		{http.MethodGet, nil, http.StatusOK, "Hello,friend!"},
 		{http.MethodPost, bytes.NewBufferString("<world>"), http.StatusOK,
-			"Hello,&lt,world&gt;!"},
+			"Hello,&lt;world&gt;!"},
 		{http.MethodHead, nil, http.StatusMethodNotAllowed, ""},
 	}
 	client := new(http.Client)
@@ -69,9 +73,9 @@ func TestSimpleHTTPServer(t *testing.T) {
 		if c.response != string(b) {
 			t.Errorf("%d: excepted %q; actual %q", i, c.response, b)
 		}
-		if err := srv.Close(); err != nil {
-			t.Fatal(err)
-		}
+	}
+	if err := srv.Close(); err != nil {
+		t.Fatal(err)
 	}
 
 }
